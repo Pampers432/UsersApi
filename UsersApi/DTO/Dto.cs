@@ -1,39 +1,40 @@
 ﻿namespace UsersApi.DTO
 {
-    public class RegisterDto
-    {
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public int RoleId { get; set; }
-        public string Password { get; set; }
-    }
+    public record UserDto(
+        Guid Id,
+        string Name,
+        string Email,
+        string Role,
+        bool IsActive,
+        bool IsEmailConfirmed
+    );
 
-    public class UserUpdateDto
-    {
-        public string Name { get; set; }
-        public int RoleId { get; set; }
-    }
+    public record RegisterDto(
+        string Name,
+        string Email,
+        string Password
+    );
 
-    public class LoginDto
-    {
-        public string Email { get; set; }
-        public string Password { get; set; }
-    }
+    public record UserUpdateDto(
+        string Name,
+        int RoleId
+    );
 
-    public class RefreshTokenDto
-    {
-        public string RefreshToken { get; set; }
-    }
+    public record LoginDto(
+        string Email,
+        string Password
+    );
 
-    public class ForgotPasswordDto
-    {
-        public string Email { get; set; }
-    }
+    public record RefreshTokenDto(
+        string RefreshToken
+    );
 
-    public class ResetPasswordDto
-    {
-        public string Token { get; set; }
-        public string NewPassword { get; set; }
-    }
+    public record ForgotPasswordDto(
+        string Email
+    );
 
+    public record ResetPasswordDto(
+        string Token,
+        string NewPassword
+    );
 }

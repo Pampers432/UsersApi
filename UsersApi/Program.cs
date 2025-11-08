@@ -1,7 +1,9 @@
 
 using Microsoft.EntityFrameworkCore;
 using System;
+using UsersApi.Contracts;
 using UsersApi.Data;
+using UsersApi.Services;
 
 namespace UsersApi
 {
@@ -13,6 +15,7 @@ namespace UsersApi
 
             builder.Services.AddDbContext<UsersApiDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
