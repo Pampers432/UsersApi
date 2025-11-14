@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using UsersApi.Contracts;
@@ -23,23 +24,67 @@ namespace UsersApi.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {
-            // TODO: логика выдачи токена
             try
             {
-                var response = await _userService.RegisterAsync(dto);
-                return Ok(new { Token = response });
+                var token = await _userService.RegisterAsync(dto);
+
+                if (string.IsNullOrEmpty(token))
+                    return BadRequest(new { error = "Ошибка регистрации" });
+
+                // Опционально: установка токена в куки
+                Response.Cookies.Append("TastyCoks", token, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTimeOffset.UtcNow.AddMinutes(60)
+                });
+
+                return Ok(new { token = token });
             }
-            catch(Exception ex)
+            catch (InvalidOperationException ex)
             {
-                return StatusCode(500, ex.Message);
-            }            
+                return Conflict(new { error = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "Внутренняя ошибка сервера" });
+            }
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            // TODO: логика выдачи токена
-            return Ok();
+            try
+            {
+                var token = await _userService.LoginAsync(dto);
+
+                if (string.IsNullOrEmpty(token))
+                    return Unauthorized(new { error = "Неверный email или пароль" });
+
+                // Установка токена в куки
+                Response.Cookies.Append("TastyCoks", token, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTimeOffset.UtcNow.AddMinutes(60)
+                });
+
+                return Ok(new { token = token });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new { error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "Внутренняя ошибка сервера" });
+            }
         }
 
         [HttpPost("refresh")]
@@ -77,6 +122,7 @@ namespace UsersApi.Controllers
         // --- Управление пользователями (Админ) ---
 
         [HttpGet]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> GetUsers()
         {
             try

@@ -1,6 +1,8 @@
-﻿using System;
+﻿using RegistrationApi.Services;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UsersApi.Abstraction;
 using UsersApi.Contracts;
 using UsersApi.DTO;
 using UsersApi.Models;
@@ -11,11 +13,13 @@ namespace UsersApi.Services
     {
         private readonly IUserRepository _repository;
         private readonly IPasswordHasherService _passwordHasher;
+        private readonly IJwtService _jwtService;
 
-        public UserService(IUserRepository repository, IPasswordHasherService passwordHasher)
+        public UserService(IUserRepository repository, IPasswordHasherService passwordHasher, IJwtService jwtService)
         {
             _repository = repository;
             _passwordHasher = passwordHasher;
+            _jwtService = jwtService;
         }
 
         public async Task<string> RegisterAsync(RegisterDto dto)
@@ -32,13 +36,12 @@ namespace UsersApi.Services
                 email: dto.Email,
                 password_Hash: hash,
                 salt: salt,
-                userRole_Id: 1 
+                userRole_Id: 1
             );
 
             await _repository.AddAsync(user);
 
-            // TODO: генерация JWT токена
-            return "TODO: token"; ;
+            return _jwtService.GenerateToken(user);
         }
 
         public async Task<string> LoginAsync(LoginDto dto)
@@ -51,14 +54,21 @@ namespace UsersApi.Services
 
             //if (!user.IsEmailConfirmed) return string.Empty;
 
-            return "TODO: token";
+            return _jwtService.GenerateToken(user);
         }
 
         public async Task<string> RefreshTokenAsync(RefreshTokenDto dto)
         {
-            // TODO: обновление токена
-            return "TODO: new_token";
+            // Базовая реализация refresh токена
+            // В реальном приложении нужно:
+            // 1. Проверить refresh token в БД
+            // 2. Найти пользователя по refresh token
+            // 3. Сгенерировать новый access token
+            // 4. Обновить refresh token в БД
+            return string.Empty;
         }
+
+
 
         public async Task<bool> ConfirmEmailAsync(string token)
         {
