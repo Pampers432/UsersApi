@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using UsersApi.Contracts;
 using UsersApi.DTO;
 
 namespace UsersApi.Controllers
@@ -9,13 +10,29 @@ namespace UsersApi.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
+        private readonly IUserService _userService;
+
+        public UsersController(IUserService userService)
+        {
+            _userService = userService;
+        }
+
+
         // --- Аутентификация / Авторизация ---
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {
             // TODO: логика выдачи токена
-            return Ok();
+            try
+            {
+                var response = await _userService.RegisterAsync(dto);
+                return Ok(new { Token = response });
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }            
         }
 
         [HttpPost("login")]
@@ -62,8 +79,17 @@ namespace UsersApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
-            // TODO: логика получения списка
-            return Ok();
+            try
+            {
+                var users = await _userService.GetUsersAsync();
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                // Логирование ошибки (реализуйте при необходимости)
+                // _logger.LogError(ex, "Ошибка при получении списка пользователей");
+                return StatusCode(500, "Внутренняя ошибка сервера");
+            }
         }
 
         [HttpDelete("{id:guid}")]

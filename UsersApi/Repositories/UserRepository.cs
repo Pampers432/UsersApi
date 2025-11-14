@@ -16,7 +16,7 @@ namespace UsersApi.Repositories
         {
             _context = context;
         }
-
+    
         public async Task<User?> GetByIdAsync(Guid id)
         {
             return await _context.users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Id == id);

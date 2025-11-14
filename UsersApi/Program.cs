@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using UsersApi.Contracts;
 using UsersApi.Data;
+using UsersApi.Repositories;
 using UsersApi.Services;
 
 namespace UsersApi
@@ -16,6 +17,8 @@ namespace UsersApi
             builder.Services.AddDbContext<UsersApiDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IPasswordHasherService, PasswordHasherService>();
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -33,6 +36,8 @@ namespace UsersApi
             app.MapControllers();
 
             app.Run();
+
+
         }
     }
 }

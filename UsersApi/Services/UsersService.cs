@@ -10,29 +10,30 @@ namespace UsersApi.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _repository;
+        private readonly IPasswordHasherService _passwordHasher;
 
-        public UserService(IUserRepository repository)
+        public UserService(IUserRepository repository, IPasswordHasherService passwordHasher)
         {
             _repository = repository;
+            _passwordHasher = passwordHasher;
         }
 
         public async Task<string> RegisterAsync(RegisterDto dto)
         {
-            var existingUser = _repository.GetByEmailAsync(dto.Email);
+            var existingUser = await _repository.GetByEmailAsync(dto.Email);
             if (existingUser != null) return string.Empty;
 
-            // TODO: хэширование пароля + генерация соли
-            var user = new User
-            {
-                Id = Guid.NewGuid(),
-                Name = dto.Name,
-                Email = dto.Email,
-                Password_Hash = dto.Password, // TODO: заменить на хэш
-                Salt = "TODO",                // TODO: заменить на соль
-                UserRole_Id = 1,
-                IsActive = true,
-                IsEmailConfirmed = false
-            };
+            if (!_passwordHasher.ValidatePasswordStrength(dto.Password)) return string.Empty;
+
+            var (hash, salt) = _passwordHasher.HashPassword(dto.Password);
+
+            var user = User.CreateUser(
+                name: dto.Name,
+                email: dto.Email,
+                password_Hash: hash,
+                salt: salt,
+                userRole_Id: 1 
+            );
 
             await _repository.AddAsync(user);
 
@@ -40,28 +41,32 @@ namespace UsersApi.Services
             return "TODO: token"; ;
         }
 
-        // --- Логин ---
         public async Task<string> LoginAsync(LoginDto dto)
         {
-            // TODO: проверить email + пароль через репозиторий
+            var user = await _repository.GetByEmailAsync(dto.Email);
+
+            if (user == null || !user.IsActive) return string.Empty;
+
+            if (!_passwordHasher.VerifyPassword(dto.Password, user.Password_Hash, user.Salt)) return string.Empty;
+
+            //if (!user.IsEmailConfirmed) return string.Empty;
+
             return "TODO: token";
         }
 
-        // --- Refresh токена ---
         public async Task<string> RefreshTokenAsync(RefreshTokenDto dto)
         {
             // TODO: обновление токена
             return "TODO: new_token";
         }
 
-        // --- Подтверждение email ---
         public async Task<bool> ConfirmEmailAsync(string token)
         {
             // TODO: найти пользователя по токену и подтвердить email
+
             return false;
         }
 
-        // --- Восстановление пароля ---
         public async Task<bool> ForgotPasswordAsync(ForgotPasswordDto dto)
         {
             // TODO: создать токен восстановления и отправить письмо
@@ -89,7 +94,8 @@ namespace UsersApi.Services
 
         public async Task<bool> DeleteUserAsync(Guid id)
         {
-            // TODO: логика удаления пользователя
+            await _repository.DeleteAsync(id);
+
             return await Task.FromResult(true);
         }
 

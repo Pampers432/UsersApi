@@ -35,15 +35,14 @@ namespace UsersApi.Migrations
                     Salt = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     IsEmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    UserRole_Id = table.Column<int>(type: "int", nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: false)
+                    UserRole_Id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_users_userRoles_RoleId",
-                        column: x => x.RoleId,
+                        name: "FK_users_userRoles_UserRole_Id",
+                        column: x => x.UserRole_Id,
                         principalTable: "userRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -71,9 +70,9 @@ namespace UsersApi.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_users_RoleId",
+                name: "IX_users_UserRole_Id",
                 table: "users",
-                column: "RoleId");
+                column: "UserRole_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_userTokens_UserId",

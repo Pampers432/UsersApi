@@ -47,9 +47,6 @@ namespace UsersApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Salt")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -59,7 +56,7 @@ namespace UsersApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("UserRole_Id");
 
                     b.ToTable("users");
                 });
@@ -111,7 +108,7 @@ namespace UsersApi.Migrations
                 {
                     b.HasOne("UsersApi.Models.UserRole", "Role")
                         .WithMany()
-                        .HasForeignKey("RoleId")
+                        .HasForeignKey("UserRole_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

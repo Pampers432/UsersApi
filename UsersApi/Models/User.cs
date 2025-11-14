@@ -24,10 +24,8 @@ namespace UsersApi.Models
         public string Salt { get; set; }
 
         public bool IsActive { get; set; } = true;
-
         public bool IsEmailConfirmed { get; set; } = false;
 
-        [Required]
         public int UserRole_Id { get; set; }
 
         public UserRole Role { get; set; }
