@@ -3,7 +3,6 @@ using UsersApi.Models;
 
 namespace UsersApi.Data
 {
-    // UsersApiDbContext.cs
     public class UsersApiDbContext : DbContext
     {
         public DbSet<User> users { get; set; } = null!;
