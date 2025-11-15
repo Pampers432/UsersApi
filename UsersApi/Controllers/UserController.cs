@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using UsersApi.Contracts;
-using UsersApi.DTO;
 
 namespace UsersApi.Controllers
 {

@@ -20,7 +20,9 @@ namespace UsersApi
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddDbContext<UsersApiDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+                b => b.MigrationsAssembly("DataAccess")
+            ));
 
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();

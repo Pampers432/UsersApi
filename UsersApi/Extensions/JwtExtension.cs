@@ -8,7 +8,7 @@ using UsersApi.Contracts;
 
 namespace UsersApi.Extensions
 {
-    public static class ApiExtensions
+    public static class JwtExtension
     {
         public static void AddApiAuthentication(this IServiceCollection services, IOptions<JwtOptions> jwtOptions)
         {

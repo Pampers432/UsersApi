@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UsersApi.Abstraction;
 using UsersApi.Contracts;
-using UsersApi.DTO;
 using UsersApi.Models;
 
 namespace UsersApi.Services

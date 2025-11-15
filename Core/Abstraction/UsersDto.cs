@@ -1,4 +1,4 @@
-﻿namespace UsersApi.DTO
+﻿namespace UsersApi.Contracts
 {
     public record UserDto(
         Guid Id,
