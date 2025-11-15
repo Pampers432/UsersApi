@@ -8,7 +8,7 @@ using UsersApi.Data;
 
 #nullable disable
 
-namespace UsersApi.Migrations
+namespace DataAccess.Migrations
 {
     [DbContext(typeof(UsersApiDbContext))]
     partial class UsersApiDbContextModelSnapshot : ModelSnapshot
@@ -21,6 +21,79 @@ namespace UsersApi.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Core.Models.Question", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ExitKeyLetter")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
+                    b.Property<Guid>("Room_id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(45)
+                        .HasColumnType("nvarchar(45)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Room_id");
+
+                    b.ToTable("Questions");
+                });
+
+            modelBuilder.Entity("Core.Models.Room", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ExitKeyWord")
+                        .IsRequired()
+                        .HasMaxLength(45)
+                        .HasColumnType("nvarchar(45)");
+
+                    b.Property<Guid>("Test_id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Test_id");
+
+                    b.ToTable("Rooms");
+                });
+
+            modelBuilder.Entity("Core.Models.Test", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(45)
+                        .HasColumnType("nvarchar(45)");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("Users_id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("Users_id");
+
+                    b.ToTable("Tests");
+                });
 
             modelBuilder.Entity("UsersApi.Models.User", b =>
                 {
@@ -104,6 +177,39 @@ namespace UsersApi.Migrations
                     b.ToTable("userTokens");
                 });
 
+            modelBuilder.Entity("Core.Models.Question", b =>
+                {
+                    b.HasOne("Core.Models.Room", "Room")
+                        .WithMany("Questions")
+                        .HasForeignKey("Room_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Room");
+                });
+
+            modelBuilder.Entity("Core.Models.Room", b =>
+                {
+                    b.HasOne("Core.Models.Test", null)
+                        .WithMany("Rooms")
+                        .HasForeignKey("Test_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Core.Models.Test", b =>
+                {
+                    b.HasOne("UsersApi.Models.User", null)
+                        .WithMany("Tests")
+                        .HasForeignKey("UserId");
+
+                    b.HasOne("UsersApi.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("Users_id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("UsersApi.Models.User", b =>
                 {
                     b.HasOne("UsersApi.Models.UserRole", "Role")
@@ -124,6 +230,21 @@ namespace UsersApi.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Core.Models.Room", b =>
+                {
+                    b.Navigation("Questions");
+                });
+
+            modelBuilder.Entity("Core.Models.Test", b =>
+                {
+                    b.Navigation("Rooms");
+                });
+
+            modelBuilder.Entity("UsersApi.Models.User", b =>
+                {
+                    b.Navigation("Tests");
                 });
 #pragma warning restore 612, 618
         }

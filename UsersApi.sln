@@ -5,7 +5,7 @@ VisualStudioVersion = 17.14.36202.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsersApi", "UsersApi\UsersApi.csproj", "{20BDBBE3-A0DB-48B2-9748-F98252DF8878}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuestionsApi", "QuestionsApi\QuestionsApi.csproj", "{7D80F95B-4586-4BFA-8A1C-881F3E36567C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestsApi", "QuestionsApi\TestsApi.csproj", "{7D80F95B-4586-4BFA-8A1C-881F3E36567C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{EE1D0332-42BD-4AF5-86F2-2890FCF3EF70}"
 EndProject

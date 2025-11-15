@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Models;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace UsersApi.Models
@@ -29,6 +30,8 @@ namespace UsersApi.Models
         public int UserRole_Id { get; set; }
 
         public UserRole Role { get; set; }
+
+        public ICollection<Test> Tests { get; set; } = new List<Test>();
 
         public User() { }
 
