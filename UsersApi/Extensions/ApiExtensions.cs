@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using RegistrationApi.Contracts;
+using System.Security.Claims;
 using System.Text;
 using UsersApi.Contracts;
 
@@ -63,7 +64,7 @@ namespace UsersApi.Extensions
                 // Политика для администраторов
                 options.AddPolicy("AdminPolicy", policy =>
                 {
-                    policy.RequireClaim("role", "2"); 
+                    policy.RequireClaim(ClaimTypes.Role, "2");
                 });
 
                 // Политика для подтвержденных email

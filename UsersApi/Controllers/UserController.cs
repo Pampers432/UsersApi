@@ -120,7 +120,7 @@ namespace UsersApi.Controllers
         }
 
         // --- Управление пользователями (Админ) ---
-
+        // Email: admin123admin@gmail.com password:Admin123Admin
         [HttpGet]
         [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> GetUsers()
@@ -137,6 +137,21 @@ namespace UsersApi.Controllers
                 return StatusCode(500, "Внутренняя ошибка сервера");
             }
         }
+
+        //[HttpGet("debug-my-token")]
+        //[Authorize] // Любой аутентифицированный пользователь
+        //public IActionResult DebugMyToken()
+        //{
+        //    var allClaims = User.Claims.Select(c => new { c.Type, c.Value }).ToList();
+
+        //    return Ok(new
+        //    {
+        //        AllClaims = allClaims,
+        //        HasRoleClaim = User.HasClaim(c => c.Type == "role"),
+        //        RoleValue = User.FindFirst("role")?.Value,
+        //        IsAdmin = User.FindFirst("role")?.Value == "2"
+        //    });
+        //}
 
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteUser(Guid id)

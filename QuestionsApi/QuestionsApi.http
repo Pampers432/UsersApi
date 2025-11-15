@@ -1,0 +1,6 @@
+@QuestionsApi_HostAddress = http://localhost:5221
+
+GET {{QuestionsApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
