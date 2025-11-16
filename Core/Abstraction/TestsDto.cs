@@ -1,37 +1,37 @@
 ﻿namespace Core.Abstraction
 {
     public record TestDto(
-        int Id,
+        Guid Id,
         string Title,
-        int Users_id
+        Guid Users_id
     );
 
     public record RoomDto(
-        int Id,
+        Guid Id,
         string ExitKeyWord,
-        int Test_id
+        Guid Test_id
     );
 
     public record QuestionDto(
-        int Id,
+        Guid Id,
         string Text,
         string ExitKeyLetter,
-        int Room_id
+        Guid Room_id
     );
 
     public record CreateTestDto(
         string Title,
-        int Users_id
+        Guid Users_id
     );
 
     public record CreateRoomDto(
         string ExitKeyWord,
-        int Test_id
+        Guid Test_id
     );
 
     public record CreateQuestionDto(
         string Text,
         string ExitKeyLetter,
-        int Room_id
+        Guid Room_id
     );
 }
