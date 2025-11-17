@@ -1,4 +1,8 @@
 
+using Core.Abstraction.IRepositories;
+using Core.Abstraction.IServices;
+using DataAccess.Repositories;
+
 namespace QuestionsApi
 {
     public class Program
@@ -7,10 +11,7 @@ namespace QuestionsApi
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 

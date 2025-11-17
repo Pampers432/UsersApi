@@ -1,9 +1,14 @@
 
+using Core.Abstraction.IRepositories;
+using Core.Abstraction.IServices;
+using Core.Services;
+using DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RegistrationApi.Contracts;
 using RegistrationApi.Services;
 using System;
+using TestsApi.Controllers;
 using UsersApi.Abstraction;
 using UsersApi.Contracts;
 using UsersApi.Data;
@@ -24,9 +29,19 @@ namespace UsersApi
                 b => b.MigrationsAssembly("DataAccess")
             ));
 
-            builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<TestsController>();
+
             builder.Services.AddScoped<IPasswordHasherService, PasswordHasherService>();
+            builder.Services.AddScoped<ITestService, TestService>();
+            builder.Services.AddScoped<IRoomService, RoomService>();
+            builder.Services.AddScoped<IQuestionService, QuestionService>();
+            builder.Services.AddScoped<IUserService, UserService>();
+
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<ITestRepository, TestRepository>();
+            builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+            builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
+            
 
             builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
             var jwtOptions = builder.Configuration.GetSection("Jwt").Get<JwtOptions>();
